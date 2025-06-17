@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>± Calculator (Uncertainty)</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 400px;
+      margin: 30px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background: #f9f9f9;
+    }
+    input {
+      padding: 8px;
+      margin: 5px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px;
+      width: 100%;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 15px;
+      padding: 10px;
+      background: #eef;
+      border-radius: 6px;
+    }
+    label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>± Calculator (Uncertainty)</h2>
+  <label>ค่า (Value) / Value / တန်ဖိုး:</label>
+  <input type="number" id="value" placeholder="เช่น 6 / e.g. 6 / ဥပမာ 6" />
+
+  <label>ความคลาดเคลื่อน (±) / Uncertainty / ကွာဟမှု (±):</label>
+  <input type="number" id="uncertainty" placeholder="เช่น 0.1 / e.g. 0.1 / ဥပမာ 0.1" />
+
+  <button onclick="calculate()">คำนวณ / Calculate / တွက်ချက်ပါ</button>
+
+  <div id="result"></div>
+
+  <script>
+    function calculate() {
+      const val = parseFloat(document.getElementById("value").value);
+      const delta = parseFloat(document.getElementById("uncertainty").value);
+
+      if (isNaN(val) || isNaN(delta)) {
+        document.getElementById("result").innerText = "กรุณาใส่ตัวเลขให้ครบถ้วน / Please enter both numbers / ကျေးဇူးပြုပြီး နံပါတ်နှစ်ခုလုံးထည့်ပါ။";
+        return;
+      }
+
+      const lower = val - delta;
+      const upper = val + delta;
+
+      document.getElementById("result").innerHTML = `
+        <strong>ผลลัพธ์ / Result / ရလဒ်:</strong><br>
+        ช่วงของค่า / Value Range / တန်ဖိုးအပိုင်းအခြား: <strong>${lower.toFixed(3)} ถึง ${upper.toFixed(3)}</strong><br>
+        ภาษาอังกฤษ: <em>${val} ± ${delta}</em><br>
+        ภาษาไทย: <em>${val} มีค่าคลาดเคลื่อน ±${delta} คือช่วง ${lower} ถึง ${upper}</em><br>
+        မြန်မာဘာသာ: <em>${val} တွင် ±${delta} ကွာဟမှုရှိပြီး၊ တန်ဖိုးအပိုင်းအခြားမှာ ${lower} မှ ${upper} ထိဖြစ်သည်။</em>
+      `;
+    }
+  </script>
+</body>
+</html>
