@@ -48,6 +48,9 @@
   <label>ความคลาดเคลื่อน (±) / Uncertainty / ကွာဟမှု (±):</label>
   <input type="number" id="uncertainty" placeholder="เช่น 0.1 / e.g. 0.1 / ဥပမာ 0.1" />
 
+  <label>ค่าที่วัดได้ / Measurement / တိုင်းတာမှု:</label>
+  <input type="number" id="measurement" placeholder="เช่น 6.05 / e.g. 6.05 / ဥပမာ 6.05" />
+
   <button onclick="calculate()">คำนวณ / Calculate / တွက်ချက်ပါ</button>
 
   <div id="result"></div>
@@ -56,14 +59,24 @@
     function calculate() {
       const val = parseFloat(document.getElementById("value").value);
       const delta = parseFloat(document.getElementById("uncertainty").value);
+      const meas = parseFloat(document.getElementById("measurement").value);
 
       if (isNaN(val) || isNaN(delta)) {
-        document.getElementById("result").innerText = "กรุณาใส่ตัวเลขให้ครบถ้วน / Please enter both numbers / ကျေးဇူးပြုပြီး နံပါတ်နှစ်ခုလုံးထည့်ပါ။";
+        document.getElementById("result").innerText = "กรุณาใส่ตัวเลขให้ครบถ้วน / Please enter all required numbers / ကျေးဇူးပြုပြီး အချက်အလက်အားလုံးကိုဖြည့်ပါ။";
         return;
       }
 
       const lower = val - delta;
       const upper = val + delta;
+      let specResult = '';
+
+      if (!isNaN(meas)) {
+        if (meas >= lower && meas <= upper) {
+          specResult = `<br><strong style='color:green'>✅ In Spec</strong>`;
+        } else {
+          specResult = `<br><strong style='color:red'>❌ Out of Spec</strong>`;
+        }
+      }
 
       document.getElementById("result").innerHTML = `
         <strong>ผลลัพธ์ / Result / ရလဒ်:</strong><br>
@@ -71,6 +84,7 @@
         ภาษาอังกฤษ: <em>${val} ± ${delta}</em><br>
         ภาษาไทย: <em>${val} มีค่าคลาดเคลื่อน ±${delta} คือช่วง ${lower} ถึง ${upper}</em><br>
         မြန်မာဘာသာ: <em>${val} တွင် ±${delta} ကွာဟမှုရှိပြီး၊ တန်ဖိုးအပိုင်းအခြားမှာ ${lower} မှ ${upper} ထိဖြစ်သည်။</em>
+        ${specResult}
       `;
     }
   </script>
